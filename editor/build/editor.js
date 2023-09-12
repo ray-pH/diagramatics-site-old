@@ -11609,6 +11609,7 @@ var activeLineGutterHighlighter = gutterLineClass.compute(["selection"], (state2
   }
   return RangeSet.of(marks);
 });
+
 // /home/ray/Code/diagramatics-site/node_modules/@lezer/common/dist/index.js
 var checkSide = function(side, pos, from, to) {
   switch (side) {
@@ -15570,6 +15571,7 @@ var defaultKeymap = [
   { key: "Mod-/", run: toggleComment },
   { key: "Alt-A", run: toggleBlockComment }
 ].concat(standardKeymap);
+var indentWithTab = { key: "Tab", run: indentMore, shift: indentLess };
 
 // /home/ray/Code/diagramatics-site/node_modules/crelt/index.js
 var add = function(elt, child) {
@@ -20666,20 +20668,29 @@ var autoCloseTags = EditorView.inputHandler.of((view8, from, to, text, defaultIn
 });
 
 // editor.js
-function handle_editor(func) {
+var extension_update_listener = function(func) {
+  return EditorView.updateListener.of((v) => {
+    if (v.docChanged)
+      func(v.state.doc);
+  });
+};
+function handle_editor(func, initial_doc) {
   let editor = new EditorView({
+    doc: initial_doc,
     extensions: [
       basicSetup,
       javascript2(),
-      EditorView.updateListener.of((v) => {
-        if (v.docChanged) {
-          func(v.state.doc);
-        }
-      })
+      keymap.of([indentWithTab]),
+      extension_update_listener(func),
+      extension_fixed_height
     ],
     parent: document.getElementById("editor")
   });
 }
+var extension_fixed_height = EditorView.theme({
+  "&": { height: "300px" },
+  ".cm-scroller": { overflow: "auto" }
+});
 export {
   handle_editor
 };
