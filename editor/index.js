@@ -1,17 +1,5 @@
-import { 
-    Diagram, polygon, line, curve, empty, text, diagram_combine,
-    Vector2, V2, Vdir, from_degree, linspace, 
-    draw_to_svg,
-    rectangle, square, regular_polygon, circle, arrow, arrow2, textvar,
-    str_to_mathematical_italic,
-    Interactive,
-    axes_transform, ax, axes_empty, 
-    xtickmark_empty, xtickmark, xticks,
-    ytickmark_empty, ytickmark, yticks,
-    xyaxes, xygrid,
-    plot, plotv, plotf, under_curvef,
-    inclined_plane,
-} from './lib/diagramatics.js'
+import * as diagramatics from './lib/diagramatics.js'
+Object.entries(diagramatics).forEach(([name, exported]) => window[name] = exported);
 import { handle_editor } from './lib/editor.js'
 
 let svgelem = document.getElementById("svg");
