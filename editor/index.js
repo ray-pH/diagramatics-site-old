@@ -34,3 +34,4 @@ handle_editor((doc) => {
     console.log(doc.toString());
     eval_diagram(doc.toString());
 }, initial_str);
+eval_diagram(initial_str);
