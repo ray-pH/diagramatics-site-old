@@ -27,7 +27,7 @@ function eval_diagram(str){
 
 let initial_str =
 `let sq1 = square(20);
-let sq2 = square(10).fill('red');
+let sq2 = square(10).fill('lightblue');
 draw(sq1, sq2);`
 
 handle_editor((doc) => {
