@@ -1,7 +1,7 @@
 // Free Body Diagram
 ////
 default_diagram_style['stroke-width'] = 2;
-default_textdata['font-size'] = 25;
+default_textdata['font-size'] = 21;
 
 let angle = from_degree(30);
 let horizontal = line(V2(0,0), V2(8,0))
