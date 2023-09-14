@@ -11,13 +11,13 @@ import {
     xyaxes, xygrid,
     plot, plotv, plotf, under_curvef,
     inclined_plane,
-} from '../node_modules/diagramatics/dist/index.js'
-import { handle_editor } from './build/editor.js'
+} from './lib/diagramatics.js'
+import { handle_editor } from './lib/editor.js'
 
 let svgelem = document.getElementById("svg");
 let draw = (...diagrams) => {
     svgelem.innerHTML = '';
-    draw_to_svg(svgelem, diagram_combine(diagrams));
+    draw_to_svg(svgelem, diagram_combine(...diagrams));
 };
 
 let inputstr=`
