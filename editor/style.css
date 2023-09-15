@@ -15,7 +15,7 @@
 
 body {
     font-family: Ubuntu;
-    margin : 0;
+    /* margin : 0; */
 }
 
 .header>img {
@@ -27,13 +27,12 @@ body {
 }
 
 .header {
-    background: #aec7e8;
     padding: 10px;
     height: 25px;
     vertical-align: top;
     margin-bottom: 30px;
     font-weight: 500;
-    border-bottom: solid black;
+    border-bottom: solid black 1px;
 }
 
 .header>span{
@@ -43,13 +42,10 @@ body {
     text-decoration: none;
     color: black;
     padding: 5px 10px;
-    /* background-color: #1f77b4; */
-    border-radius: 20px;
-    /* color: white; */
+    border-radius: 10px;
 }
 .header>a:hover {
-    background-color: #FFF5;
-    /* color:white; */
+    background-color: #aec7e8;
 }
 .header-left {
     float: left;
@@ -60,4 +56,13 @@ body {
 
 .container {
     margin: 10px;
+}
+.editor-container{
+    padding: 10px;
+    background-color: #DDD;
+    border-radius: 15px;
+}
+.editor-header{
+    font-weight: 600;
+    margin: 0px 5px 5px 5px;
 }
