@@ -66,3 +66,25 @@ body {
     font-weight: 600;
     margin: 0px 5px 5px 5px;
 }
+.editor-footer{
+    margin: 10px 5px 0px 0px;
+}
+#editor-footer-info{
+    padding : 5px 10px;
+    border-radius: 10px;
+}
+#editor-footer-info.success{
+    background-color: #aec7e8;
+}
+#editor-footer-info.waiting{
+    background-color: #c7c7c7;
+}
+#editor-footer-info.error{
+    background-color: #ff9896;
+}
+#editor-footer-desc{
+    display: inline-block;
+    font-size: 0.8em;
+    /* margin-top: 10px; */
+    margin-left: 10px;
+}
