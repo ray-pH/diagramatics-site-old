@@ -18,15 +18,15 @@ let arrow_head_size = 0.12;
 
 let vx = V2(1,0); let vy = V2(0,1); let vnx = V2(-1,0); let vny = V2(0,-1);
 let forces_annotation = diagram_combine(
-    annotation_vector(vny.scale(3.5), 'Mg', V2(0.6,0.2), arrow_head_size)
+    annotation.vector(vny.scale(3.5), 'Mg', V2(0.6,0.2), arrow_head_size)
         .position(csq),
-    annotation_vector(Vdir(angle + Math.PI/2).scale(5), 'N', V2(0.6,0.2), arrow_head_size)
+    annotation.vector(Vdir(angle + Math.PI/2).scale(5), 'N', V2(0.6,0.2), arrow_head_size)
         .position(plane.parametric_point(0.6)),
-    annotation_vector(Vdir(angle).scale(1.2), 'f', V2(0.0,-0.6), arrow_head_size)
+    annotation.vector(Vdir(angle).scale(1.2), 'f', V2(0.0,-0.6), arrow_head_size)
         .position(plane.parametric_point(0.6)),
-    annotation_vector(Vdir(angle).scale(2), 'F', V2(-0.5,-1.0), arrow_head_size)
+    annotation.vector(Vdir(angle).scale(2), 'F', V2(-0.5,-1.0), arrow_head_size)
         .move_origin(Vdir(angle).scale(2)).position(sq.parametric_point(0.5,0)),
 );
-let angle_annotation = annotation_angle([V2(1,0), V2(0,0), Vdir(angle)], '\\theta', 1, V2(0.5,0.1));
+let angle_annotation = annotation.angle([V2(1,0), V2(0,0), Vdir(angle)], '\\theta', 1, V2(0.5,0.1));
 
 draw (horizontal, sq, plane, forces_annotation, angle_annotation);

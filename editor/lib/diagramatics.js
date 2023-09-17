@@ -1366,6 +1366,26 @@ function annotation_angle(p, str, radius = 1, text_offset) {
 function inclined_plane(length, angle) {
   return polygon([V2(0, 0), V2(length, length * Math.tan(angle)), V2(length, 0)]);
 }
+// /home/ray/Code/diagramatics/dist/encoding.js
+var exports_encoding = {};
+__export(exports_encoding, {
+  encode: () => {
+    {
+      return encode;
+    }
+  },
+  decode: () => {
+    {
+      return decode;
+    }
+  }
+});
+function encode(s) {
+  return btoa(encodeURIComponent(s));
+}
+function decode(s) {
+  return decodeURIComponent(atob(s));
+}
 export {
   yticks,
   ytickmark_empty,
@@ -1393,6 +1413,7 @@ export {
   line,
   inclined_plane,
   from_degree,
+  exports_encoding as encoding,
   empty,
   draw_to_svg,
   diagram_combine,

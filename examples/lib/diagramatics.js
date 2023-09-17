@@ -1324,7 +1324,25 @@ var default_axes_options = {
 };
 var ax = axes_transform;
 // /home/ray/Code/diagramatics/dist/shapes/shapes_annotation.js
-function annotation_vector(v, str, text_offset, arrow_head_size) {
+var exports_shapes_annotation = {};
+__export(exports_shapes_annotation, {
+  vector_text: () => {
+    {
+      return vector_text;
+    }
+  },
+  vector: () => {
+    {
+      return vector;
+    }
+  },
+  angle: () => {
+    {
+      return angle;
+    }
+  }
+});
+function vector(v, str, text_offset, arrow_head_size) {
   if (text_offset == undefined) {
     text_offset = V2(0, 0);
   }
@@ -1335,7 +1353,7 @@ function annotation_vector(v, str, text_offset, arrow_head_size) {
   let txt = textvar(str).position(v.add(text_offset));
   return diagram_combine(vec, txt);
 }
-function annotation_vector_text(v, str, text_offset, arrow_head_size) {
+function vector_text(v, str, text_offset, arrow_head_size) {
   if (text_offset == undefined) {
     text_offset = V2(0, 0);
   }
@@ -1346,7 +1364,7 @@ function annotation_vector_text(v, str, text_offset, arrow_head_size) {
   let txt = text(str).position(v.add(text_offset));
   return diagram_combine(vec, txt);
 }
-function annotation_angle(p, str, radius = 1, text_offset) {
+function angle(p, str, radius = 1, text_offset) {
   if (text_offset == undefined) {
     text_offset = V2(0, 0);
   }
@@ -1362,9 +1380,39 @@ function annotation_angle(p, str, radius = 1, text_offset) {
   let angle_text = textvar(str_to_mathematical_italic(str)).position(Vdir((angle_a + angle_b) / 2)).translate(text_offset);
   return diagram_combine(angle_arc, angle_text);
 }
+
 // /home/ray/Code/diagramatics/dist/shapes/shapes_mechanics.js
-function inclined_plane(length, angle) {
-  return polygon([V2(0, 0), V2(length, length * Math.tan(angle)), V2(length, 0)]);
+var exports_shapes_mechanics = {};
+__export(exports_shapes_mechanics, {
+  inclined_plane: () => {
+    {
+      return inclined_plane;
+    }
+  }
+});
+function inclined_plane(length, angle2) {
+  return polygon([V2(0, 0), V2(length, length * Math.tan(angle2)), V2(length, 0)]);
+}
+
+// /home/ray/Code/diagramatics/dist/encoding.js
+var exports_encoding = {};
+__export(exports_encoding, {
+  encode: () => {
+    {
+      return encode;
+    }
+  },
+  decode: () => {
+    {
+      return decode;
+    }
+  }
+});
+function encode(s) {
+  return btoa(encodeURIComponent(s));
+}
+function decode(s) {
+  return decodeURIComponent(atob(s));
 }
 export {
   yticks,
@@ -1389,10 +1437,11 @@ export {
   plotf,
   plot,
   exports_modifier as mod,
+  exports_shapes_mechanics as mechanics,
   linspace,
   line,
-  inclined_plane,
   from_degree,
+  exports_encoding as encoding,
   empty,
   draw_to_svg,
   diagram_combine,
@@ -1407,9 +1456,7 @@ export {
   arrow2,
   arrow,
   arc,
-  annotation_vector_text,
-  annotation_vector,
-  annotation_angle,
+  exports_shapes_annotation as annotation,
   Vector2,
   Vdir,
   V2,
