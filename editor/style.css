@@ -13,50 +13,6 @@
 /* 'grey'        : '#7f7f7f', */
 /* 'lightgrey'   : '#c7c7c7', */
 
-body {
-    font-family: Ubuntu;
-    /* margin : 0; */
-}
-
-.header>img {
-    height: 60px;
-    vertical-align: top;
-    margin-right: 10px;
-    background: white;
-    border-radius: 40%;
-}
-
-.header {
-    padding: 10px;
-    height: 25px;
-    vertical-align: top;
-    margin-bottom: 30px;
-    font-weight: 500;
-    border-bottom: solid black 1px;
-}
-
-.header>span{
-    padding: 5px 10px;
-}
-.header>a {
-    text-decoration: none;
-    color: black;
-    padding: 5px 10px;
-    border-radius: 10px;
-}
-.header>a:hover {
-    background-color: #aec7e8;
-}
-.header-left {
-    float: left;
-}
-.header-right {
-    float: right;
-}
-
-.container {
-    margin: 10px;
-}
 .editor-container{
     padding: 10px;
     background-color: #DDD;
@@ -87,4 +43,35 @@ body {
     font-size: 0.8em;
     /* margin-top: 10px; */
     margin-left: 10px;
+}
+
+
+.top-block{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+.svg-container{
+    flex-grow: 1;
+}
+.svg-settings-container{
+    /* background-color: #DDD; */
+    border-radius: 15px;
+    padding: 10px;
+    width:100px;
+    /* display: inline-block; */
+}
+
+.svg-settings-button{
+    border: none;
+    font-family: inherit;
+    width: 100%;
+    margin: 5px 0px;
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #DDD;
+    cursor: pointer;
+}
+.svg-settings-button:hover{
+    background-color: #aec7e8;
 }
