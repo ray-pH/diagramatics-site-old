@@ -33,6 +33,7 @@ function eval_diagram(str){
             wait_typing_show_error(e)
         }, 500);
     }finally{
+        localStorage.setItem('editorCode', str);
         if(success){
             prev_str = str;
             editor_footer_info.className = "success";
@@ -85,8 +86,16 @@ let initial_str =
 let sq2 = square(10).fill('lightblue');
 draw(sq1, sq2);`
 
-handle_editor((doc) => {
-    // console.log(doc.toString());
-    eval_diagram(doc.toString());
-}, initial_str);
-eval_diagram(initial_str);
+function load_editor_code(){
+    let code = localStorage.getItem('editorCode');
+    return code ? code : initial_str;
+}
+handle_editor(
+    (doc) => {
+        // console.log(doc.toString());
+        eval_diagram(doc.toString());
+    }, 
+    load_editor_code()
+);
+
+eval_diagram(load_editor_code());
