@@ -1,3 +1,14 @@
+var __defProp = Object.defineProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, {
+      get: all[name],
+      enumerable: true,
+      configurable: true,
+      set: (newValue) => all[name] = () => newValue
+    });
+};
+
 // /home/ray/Code/diagramatics/dist/linear_algebra.js
 function from_degree(angle) {
   return angle * Math.PI / 180;
@@ -13,6 +24,18 @@ function linspace(start, end, n = 100) {
   let step = (end - start) / (n - 1);
   for (let i = 0;i < n; i++) {
     result.push(start + step * i);
+  }
+  return result;
+}
+function range(start, end, step = 1) {
+  if (step == 0)
+    return [];
+  let n = Math.floor((end - start) / step);
+  if (n <= 0)
+    return [];
+  let result = [];
+  for (let i = start;i < end; i += step) {
+    result.push(i);
   }
   return result;
 }
@@ -171,6 +194,9 @@ class Diagram {
       newd.path = newd.path.copy();
     }
     return newd;
+  }
+  apply(func) {
+    return func(this.copy());
   }
   combine(...diagrams) {
     return diagram_combine(this, ...diagrams);
@@ -1021,6 +1047,101 @@ class Interactive {
     this.container_div.appendChild(container);
   }
 }
+// /home/ray/Code/diagramatics/dist/modifier.js
+var exports_modifier = {};
+__export(exports_modifier, {
+  round_corner: () => {
+    {
+      return round_corner;
+    }
+  }
+});
+
+// /home/ray/Code/diagramatics/dist/utils.js
+function array_repeat(arr, len) {
+  let new_arr = [];
+  for (let i = 0;i < len; i++) {
+    new_arr.push(arr[i % arr.length]);
+  }
+  return new_arr;
+}
+
+// /home/ray/Code/diagramatics/dist/modifier.js
+var function_handle_path_type = function(func) {
+  function modified_func(d) {
+    if (d.type == DiagramType.Polygon || d.type == DiagramType.Curve) {
+      d = func(d);
+    } else if (d.type == DiagramType.Diagram) {
+      d.children = d.children.map((c) => modified_func(c));
+    } else if (d.type == DiagramType.Empty || d.type == DiagramType.Text) {
+    } else {
+      throw new Error("Unreachable, unknown diagram type : " + d.type);
+    }
+    return d;
+  }
+  return modified_func;
+};
+var get_round_corner_arc_points = function(radius, points) {
+  let [p1, p2, p3] = points;
+  let v1 = p1.sub(p2).normalize();
+  let v3 = p3.sub(p2).normalize();
+  let corner_angle = Math.abs((v1.angle() - v3.angle()) % Math.PI);
+  let s_dist = radius / Math.tan(corner_angle / 2);
+  let d1 = p1.sub(p2).length();
+  let d3 = p3.sub(p2).length();
+  s_dist = Math.min(s_dist, d1 / 2, d3 / 2);
+  radius = s_dist * Math.tan(corner_angle / 2);
+  let pa = p2.add(v1.scale(s_dist));
+  let pb = p2.add(v3.scale(s_dist));
+  let distc = Math.sqrt(radius * radius + s_dist * s_dist);
+  let pc = p2.add(v1.add(v3).normalize().scale(distc));
+  let angle_a = pa.sub(pc).angle();
+  let angle_b = pb.sub(pc).angle();
+  let angle_b_plus = angle_b + 2 * Math.PI;
+  let angle_b_minus = angle_b - 2 * Math.PI;
+  let angle_a_b = Math.abs(angle_a - angle_b);
+  let angle_a_b_plus = Math.abs(angle_a - angle_b_plus);
+  let angle_a_b_minus = Math.abs(angle_a - angle_b_minus);
+  if (angle_a_b_plus < angle_a_b)
+    angle_b = angle_b_plus;
+  if (angle_a_b_minus < angle_a_b)
+    angle_b = angle_b_minus;
+  let arc_points = linspace(angle_a, angle_b, 40).map((a) => pc.add(Vdir(a).scale(radius)));
+  return arc_points;
+};
+function round_corner(radius = 1, point_indices) {
+  if (typeof radius == "number")
+    radius = [radius];
+  function func(d) {
+    if (d.path == undefined)
+      return d;
+    let diagram_point_indices = range(0, d.path.points.length);
+    if (point_indices == undefined)
+      point_indices = diagram_point_indices;
+    point_indices = point_indices.filter((i) => diagram_point_indices.includes(i));
+    radius = array_repeat(radius, point_indices.length);
+    let new_points = [];
+    for (let i in d.path.points) {
+      let curr_i = parseInt(i);
+      if (!point_indices.includes(curr_i)) {
+        new_points.push(d.path.points[i]);
+        continue;
+      }
+      let prev_i = (curr_i - 1 + d.path.points.length) % d.path.points.length;
+      let next_i = (curr_i + 1) % d.path.points.length;
+      let prev_p = d.path.points[prev_i];
+      let curr_p = d.path.points[i];
+      let next_p = d.path.points[next_i];
+      let arc_points = get_round_corner_arc_points(radius[point_indices.indexOf(curr_i)], [prev_p, curr_p, next_p]);
+      new_points = new_points.concat(arc_points);
+    }
+    let newd = d.copy();
+    newd.path = new Path(new_points);
+    return newd;
+  }
+  return function_handle_path_type(func);
+}
+
 // /home/ray/Code/diagramatics/dist/shapes/shapes_graph.js
 function axes_transform(axes_options) {
   let opt = Object.assign(Object.assign({}, default_axes_options), axes_options);
@@ -1069,10 +1190,10 @@ function ytickmark(y, str, height = 0.1) {
   return diagram_combine(tick, label);
 }
 var get_tick_interval = function(min, max) {
-  let range = max - min;
-  let range_order = Math.floor(Math.log10(range));
+  let range2 = max - min;
+  let range_order = Math.floor(Math.log10(range2));
   let interval_to_try = [0.1, 0.15, 0.2, 0.5, 1].map((x) => x * Math.pow(10, range_order));
-  let tick_counts = interval_to_try.map((x) => Math.floor(range / x));
+  let tick_counts = interval_to_try.map((x) => Math.floor(range2 / x));
   for (let i = 0;i < tick_counts.length; i++) {
     if (tick_counts[i] <= 10) {
       return interval_to_try[i];
@@ -1262,10 +1383,12 @@ export {
   square,
   regular_polygon,
   rectangle,
+  range,
   polygon,
   plotv,
   plotf,
   plot,
+  exports_modifier as mod,
   linspace,
   line,
   inclined_plane,
