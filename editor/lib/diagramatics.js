@@ -74,12 +74,18 @@ class Vector2 {
   length() {
     return Math.sqrt(this.x * this.x + this.y * this.y);
   }
+  length_sq() {
+    return this.x * this.x + this.y * this.y;
+  }
   angle() {
     return Math.atan2(this.y, this.x);
   }
   normalize() {
     let len = this.length();
     return new Vector2(this.x / len, this.y / len);
+  }
+  copy() {
+    return new Vector2(this.x, this.y);
   }
 }
 
@@ -115,7 +121,8 @@ var anchor_to_textdata = function(anchor) {
 };
 function diagram_combine(...diagrams) {
   let newdiagrams = diagrams.map((d) => d.copy());
-  return new Diagram(DiagramType.Diagram, { children: newdiagrams });
+  let newd = new Diagram(DiagramType.Diagram, { children: newdiagrams });
+  return newd.move_origin(Anchor.CenterCenter);
 }
 function line(start, end) {
   let path = new Path([start, end]);
@@ -319,6 +326,8 @@ class Diagram {
         maxy = Math.max(maxy, point.y);
       }
       return [new Vector2(minx, miny), new Vector2(maxx, maxy)];
+    } else if (this.type == DiagramType.Text) {
+      return [this.origin.copy(), this.origin.copy()];
     } else {
       throw new Error("Unreachable, unknown diagram type : " + this.type);
     }
@@ -507,6 +516,62 @@ class Diagram {
       throw new Error("Unreachable, unknown diagram type : " + this.type);
     }
   }
+  debug_bbox() {
+    let style_bbox = (d) => {
+      return d.fill("none").stroke("gray").strokedasharray([5, 5]);
+    };
+    let [min, max] = this.bounding_box();
+    let rect_bbox = polygon([
+      new Vector2(min.x, min.y),
+      new Vector2(max.x, min.y),
+      new Vector2(max.x, max.y),
+      new Vector2(min.x, max.y)
+    ]).apply(style_bbox);
+    let origin_x = text("\u2BBE").position(this.origin);
+    return rect_bbox.combine(origin_x);
+  }
+  debug(show_index = true) {
+    let style_path = (d) => {
+      return d.fill("none").stroke("red").strokedasharray([5, 5]);
+    };
+    let style_index = (d) => {
+      let bg = d.fill("white").stroke("white").strokewidth(5);
+      let dd = d.fill("black");
+      return bg.combine(dd);
+    };
+    if (this.type == DiagramType.Diagram) {
+      return this.debug_bbox();
+    } else if (this.type == DiagramType.Text) {
+      return empty(this.origin);
+    } else if (this.type == DiagramType.Polygon || this.type == DiagramType.Curve) {
+      let f_obj = this.type == DiagramType.Polygon ? polygon : curve;
+      let deb_bbox = this.debug_bbox();
+      if (this.path == undefined) {
+        throw new Error(this.type + " must have a path");
+      }
+      let deb_object = f_obj(this.path.points).apply(style_path);
+      if (show_index == false) {
+        return deb_bbox.combine(deb_object);
+      }
+      let points = this.path.points;
+      let point_texts = [];
+      let prev_point = undefined;
+      let [min, max] = this.bounding_box();
+      let minimum_dist_tolerance = Math.min(max.x - min.x, max.y - min.y) / 10;
+      for (let i = 0;i < points.length; i++) {
+        let dist_to_prev = prev_point == undefined ? Infinity : points[i].sub(prev_point).length();
+        if (dist_to_prev < minimum_dist_tolerance)
+          continue;
+        point_texts.push(text(i.toString()).position(points[i]).apply(style_index));
+        prev_point = points[i];
+      }
+      return deb_bbox.combine(deb_object, ...point_texts);
+    } else if (this.type == DiagramType.Empty) {
+      return this.copy();
+    } else {
+      throw new Error("Unreachable, unknown diagram type : " + this.type);
+    }
+  }
 }
 
 class Path {
@@ -672,32 +737,34 @@ var collect_text = function(diagram2) {
     return [];
   }
 };
-var draw_text = function(svgelement, diagram2) {
-  let style = Object.assign(Object.assign({}, default_text_diagram_style), diagram2.style);
-  style.fill = get_color(style.fill, tab_color);
-  style.stroke = get_color(style.stroke, tab_color);
-  let textdata = Object.assign(Object.assign({}, default_textdata), diagram2.textdata);
-  if (diagram2.path == undefined) {
-    throw new Error("Text must have a path");
-  }
-  let text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
-  text2.setAttribute("x", diagram2.path.points[0].x.toString());
-  text2.setAttribute("y", (-diagram2.path.points[0].y).toString());
+var draw_texts = function(svgelement, diagrams) {
   let bbox = svgelement.getBBox();
   let svgelement_width = svgelement.width.baseVal.value;
   let svgelement_height = svgelement.height.baseVal.value;
   let scale = Math.max(bbox.width / svgelement_width, bbox.height / svgelement_height);
-  let font_size = parseFloat(textdata["font-size"]) * scale;
-  text2.setAttribute("font-family", textdata["font-family"]);
-  text2.setAttribute("font-size", font_size.toString());
-  text2.setAttribute("font-weight", textdata["font-weight"]);
-  text2.setAttribute("text-anchor", textdata["text-anchor"]);
-  text2.setAttribute("dominant-baseline", textdata["dominant-baseline"]);
-  for (let stylename in style) {
-    text2.style[stylename] = style[stylename];
+  for (let diagram2 of diagrams) {
+    let style = Object.assign(Object.assign({}, default_text_diagram_style), diagram2.style);
+    style.fill = get_color(style.fill, tab_color);
+    style.stroke = get_color(style.stroke, tab_color);
+    let textdata = Object.assign(Object.assign({}, default_textdata), diagram2.textdata);
+    if (diagram2.path == undefined) {
+      throw new Error("Text must have a path");
+    }
+    let text2 = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    text2.setAttribute("x", diagram2.path.points[0].x.toString());
+    text2.setAttribute("y", (-diagram2.path.points[0].y).toString());
+    let font_size = parseFloat(textdata["font-size"]) * scale;
+    text2.setAttribute("font-family", textdata["font-family"]);
+    text2.setAttribute("font-size", font_size.toString());
+    text2.setAttribute("font-weight", textdata["font-weight"]);
+    text2.setAttribute("text-anchor", textdata["text-anchor"]);
+    text2.setAttribute("dominant-baseline", textdata["dominant-baseline"]);
+    for (let stylename in style) {
+      text2.style[stylename] = style[stylename];
+    }
+    text2.innerHTML = textdata["text"];
+    svgelement.appendChild(text2);
   }
-  text2.innerHTML = textdata["text"];
-  svgelement.appendChild(text2);
 };
 function draw_to_svg(svgelement, diagram2, set_html_attribute = true, render_text = true) {
   if (diagram2.type == DiagramType.Polygon) {
@@ -714,9 +781,7 @@ function draw_to_svg(svgelement, diagram2, set_html_attribute = true, render_tex
   }
   if (render_text) {
     let text_diagrams = collect_text(diagram2);
-    for (let d of text_diagrams) {
-      draw_text(svgelement, d);
-    }
+    draw_texts(svgelement, text_diagrams);
   }
   if (set_html_attribute) {
     let bbox = svgelement.getBBox();
@@ -930,6 +995,10 @@ function regular_polygon(n, radius = 1) {
   }
   return polygon(points);
 }
+function regular_polygon_side(n, sidelength = 1) {
+  let radius = sidelength / (2 * Math.sin(Math.PI / n));
+  return regular_polygon(n, radius);
+}
 function circle(radius = 1) {
   return regular_polygon(50, radius);
 }
@@ -958,6 +1027,89 @@ function arrow2(start, end, headsize = 3) {
 function textvar(str) {
   return text(str_to_mathematical_italic(str));
 }
+// /home/ray/Code/diagramatics/dist/alignment.js
+function align_vertical(diagrams, alignment = VerticalAlignment.Center) {
+  if (diagrams.length == 0) {
+    return diagrams;
+  }
+  if (alignment == VerticalAlignment.Top) {
+    let top_y = diagrams[0].get_anchor(Anchor.TopLeft).y;
+    return diagrams.map((d) => d.translate(V2(0, top_y - d.get_anchor(Anchor.TopLeft).y)));
+  } else if (alignment == VerticalAlignment.Center) {
+    let center_y = diagrams[0].get_anchor(Anchor.CenterLeft).y;
+    return diagrams.map((d) => d.translate(V2(0, center_y - d.get_anchor(Anchor.CenterLeft).y)));
+  } else if (alignment == VerticalAlignment.Bottom) {
+    let bottom_y = diagrams[0].get_anchor(Anchor.BottomLeft).y;
+    return diagrams.map((d) => d.translate(V2(0, bottom_y - d.get_anchor(Anchor.BottomLeft).y)));
+  } else {
+    throw new Error("Unknown vertical alignment : " + alignment);
+  }
+}
+function align_horizontal(diagrams, alignment = HorizontalAlignment.Center) {
+  if (diagrams.length == 0) {
+    return diagrams;
+  }
+  if (alignment == HorizontalAlignment.Left) {
+    let left_x = diagrams[0].get_anchor(Anchor.TopLeft).x;
+    return diagrams.map((d) => d.translate(V2(left_x - d.get_anchor(Anchor.TopLeft).x, 0)));
+  } else if (alignment == HorizontalAlignment.Center) {
+    let center_x = diagrams[0].get_anchor(Anchor.TopCenter).x;
+    return diagrams.map((d) => d.translate(V2(center_x - d.get_anchor(Anchor.TopCenter).x, 0)));
+  } else if (alignment == HorizontalAlignment.Right) {
+    let right_x = diagrams[0].get_anchor(Anchor.TopRight).x;
+    return diagrams.map((d) => d.translate(V2(right_x - d.get_anchor(Anchor.TopRight).x, 0)));
+  } else {
+    throw new Error("Unknown horizontal alignment : " + alignment);
+  }
+}
+function distribute_horizontal(diagrams, space = 0) {
+  if (diagrams.length == 0) {
+    return diagrams;
+  }
+  let distributed_diagrams = [diagrams[0]];
+  for (let i = 1;i < diagrams.length; i++) {
+    let prev_diagram = distributed_diagrams[i - 1];
+    let this_diagram = diagrams[i];
+    let prev_right = prev_diagram.get_anchor(Anchor.TopRight).x;
+    let this_left = this_diagram.get_anchor(Anchor.TopLeft).x;
+    let dx = prev_right - this_left + space;
+    distributed_diagrams.push(this_diagram.translate(V2(dx, 0)));
+  }
+  return distributed_diagrams;
+}
+function distribute_vertical(diagrams, space = 0) {
+  if (diagrams.length == 0) {
+    return diagrams;
+  }
+  let distributed_diagrams = [diagrams[0]];
+  for (let i = 1;i < diagrams.length; i++) {
+    let prev_diagram = distributed_diagrams[i - 1];
+    let this_diagram = diagrams[i];
+    let prev_bottom = prev_diagram.get_anchor(Anchor.BottomLeft).y;
+    let this_top = this_diagram.get_anchor(Anchor.TopLeft).y;
+    let dy = prev_bottom - this_top + space;
+    distributed_diagrams.push(this_diagram.translate(V2(0, dy)));
+  }
+  return distributed_diagrams;
+}
+function distribute_horizontal_and_align(diagrams, horizontal_space = 0, alignment = VerticalAlignment.Center) {
+  return distribute_horizontal(align_vertical(diagrams, alignment), horizontal_space);
+}
+function distribute_vertical_and_align(diagrams, vertical_space = 0, alignment = HorizontalAlignment.Center) {
+  return distribute_vertical(align_horizontal(diagrams, alignment), vertical_space);
+}
+var VerticalAlignment;
+(function(VerticalAlignment2) {
+  VerticalAlignment2["Top"] = "top";
+  VerticalAlignment2["Center"] = "center";
+  VerticalAlignment2["Bottom"] = "bottom";
+})(VerticalAlignment || (VerticalAlignment = {}));
+var HorizontalAlignment;
+(function(HorizontalAlignment2) {
+  HorizontalAlignment2["Left"] = "left";
+  HorizontalAlignment2["Center"] = "center";
+  HorizontalAlignment2["Right"] = "right";
+})(HorizontalAlignment || (HorizontalAlignment = {}));
 // /home/ray/Code/diagramatics/dist/interactive.js
 var create_slider = function(callback, min = 0, max = 100, value = 50, step) {
   let slider = document.createElement("input");
@@ -1324,7 +1476,25 @@ var default_axes_options = {
 };
 var ax = axes_transform;
 // /home/ray/Code/diagramatics/dist/shapes/shapes_annotation.js
-function annotation_vector(v, str, text_offset, arrow_head_size) {
+var exports_shapes_annotation = {};
+__export(exports_shapes_annotation, {
+  vector_text: () => {
+    {
+      return vector_text;
+    }
+  },
+  vector: () => {
+    {
+      return vector;
+    }
+  },
+  angle: () => {
+    {
+      return angle;
+    }
+  }
+});
+function vector(v, str, text_offset, arrow_head_size) {
   if (text_offset == undefined) {
     text_offset = V2(0, 0);
   }
@@ -1335,7 +1505,7 @@ function annotation_vector(v, str, text_offset, arrow_head_size) {
   let txt = textvar(str).position(v.add(text_offset));
   return diagram_combine(vec, txt);
 }
-function annotation_vector_text(v, str, text_offset, arrow_head_size) {
+function vector_text(v, str, text_offset, arrow_head_size) {
   if (text_offset == undefined) {
     text_offset = V2(0, 0);
   }
@@ -1346,7 +1516,7 @@ function annotation_vector_text(v, str, text_offset, arrow_head_size) {
   let txt = text(str).position(v.add(text_offset));
   return diagram_combine(vec, txt);
 }
-function annotation_angle(p, str, radius = 1, text_offset) {
+function angle(p, str, radius = 1, text_offset) {
   if (text_offset == undefined) {
     text_offset = V2(0, 0);
   }
@@ -1362,10 +1532,20 @@ function annotation_angle(p, str, radius = 1, text_offset) {
   let angle_text = textvar(str_to_mathematical_italic(str)).position(Vdir((angle_a + angle_b) / 2)).translate(text_offset);
   return diagram_combine(angle_arc, angle_text);
 }
+
 // /home/ray/Code/diagramatics/dist/shapes/shapes_mechanics.js
-function inclined_plane(length, angle) {
-  return polygon([V2(0, 0), V2(length, length * Math.tan(angle)), V2(length, 0)]);
+var exports_shapes_mechanics = {};
+__export(exports_shapes_mechanics, {
+  inclined_plane: () => {
+    {
+      return inclined_plane;
+    }
+  }
+});
+function inclined_plane(length, angle2) {
+  return polygon([V2(0, 0), V2(length, length * Math.tan(angle2)), V2(length, 0)]);
 }
+
 // /home/ray/Code/diagramatics/dist/encoding.js
 var exports_encoding = {};
 __export(exports_encoding, {
@@ -1401,6 +1581,7 @@ export {
   str_to_mathematical_italic,
   str_latex_to_unicode,
   square,
+  regular_polygon_side,
   regular_polygon,
   rectangle,
   range,
@@ -1409,13 +1590,17 @@ export {
   plotf,
   plot,
   exports_modifier as mod,
+  exports_shapes_mechanics as mechanics,
   linspace,
   line,
-  inclined_plane,
   from_degree,
   exports_encoding as encoding,
   empty,
   draw_to_svg,
+  distribute_vertical_and_align,
+  distribute_vertical,
+  distribute_horizontal_and_align,
+  distribute_horizontal,
   diagram_combine,
   default_textdata,
   default_text_diagram_style,
@@ -1428,9 +1613,9 @@ export {
   arrow2,
   arrow,
   arc,
-  annotation_vector_text,
-  annotation_vector,
-  annotation_angle,
+  exports_shapes_annotation as annotation,
+  align_vertical,
+  align_horizontal,
   Vector2,
   Vdir,
   V2,
