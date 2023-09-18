@@ -1555,6 +1555,11 @@ function angle(p, str, radius = 1, text_offset) {
 // /home/ray/Code/diagramatics/dist/shapes/shapes_mechanics.js
 var exports_shapes_mechanics = {};
 __export(exports_shapes_mechanics, {
+  spring: () => {
+    {
+      return spring;
+    }
+  },
   inclined_plane: () => {
     {
       return inclined_plane;
@@ -1563,6 +1568,18 @@ __export(exports_shapes_mechanics, {
 });
 function inclined_plane(length, angle2) {
   return polygon([V2(0, 0), V2(length, length * Math.tan(angle2)), V2(length, 0)]);
+}
+function spring(p1, p2, radius = 1, coil_number = 10, sample_number = 100, separation_coefficient = 0.398) {
+  let angle2 = p2.sub(p1).angle();
+  let length = p2.sub(p1).length();
+  let R = separation_coefficient;
+  let n = coil_number;
+  let k = radius / R;
+  let a = (2 * n + 1) * Math.PI;
+  let b = (length - 2 * R) / a;
+  let parametric_function = (t) => V2(b * t + R - R * Math.cos(t), k * R * Math.sin(t));
+  let points = linspace(0, a, sample_number).map(parametric_function);
+  return curve(points).rotate(angle2).translate(p1);
 }
 
 // /home/ray/Code/diagramatics/dist/encoding.js
