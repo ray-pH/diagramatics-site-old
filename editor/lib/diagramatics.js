@@ -1200,6 +1200,9 @@ class Interactive {
     let morebutton = document.createElement("button");
     morebutton.classList.add("diagramatics-slider-moreplaybutton");
     morebutton.innerHTML = "\u22EF";
+    morebutton.onclick = () => {
+      alert("Not implemented yet");
+    };
     let leftcontainer = document.createElement("div");
     leftcontainer.classList.add("diagramatics-slider-leftcontainer");
     leftcontainer.appendChild(playbutton);
