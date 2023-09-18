@@ -90,8 +90,11 @@ function draw_code(svgelem, controlelem, code){
     }
 
     // reset default styles
-    default_diagram_style      = {..._init_default_diagram_style};
-    default_text_diagram_style = {..._init_default_text_diagram_style};
-    default_textdata           = {..._init_default_textdata};
+    for (let s in default_diagram_style) 
+        default_diagram_style[s] = _init_default_diagram_style[s];
+    for (let s in default_text_diagram_style)
+        default_text_diagram_style[s] = _init_default_text_diagram_style[s];
+    for (let s in default_textdata)
+        default_textdata[s] = _init_default_textdata[s];
 
 }
