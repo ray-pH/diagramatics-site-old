@@ -1,6 +1,7 @@
 /* <div class="example"> 
 /*     <div class="example-diagram">
 /*         <svg class="svg-diagram"> ... </svg>
+/*         <div class="control-container">  </div>
 /*     </div>
 /*     <div class="example-code-container"> 
 /*         <span class="example-title"> ... </span>
@@ -32,6 +33,9 @@ pre {
 .svg-diagram {
     width: 400px;
     height: 300px;
+}
+.control-container {
+    margin-left: 50px;
 }
 .example-title {
     display: block;

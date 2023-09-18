@@ -9,6 +9,7 @@ for (let ex in examples) {
     // <div class="example">
     //     <div class="example-diagram">
     //         <svg class="svg-diagram"> ... </svg>
+    //         <div class="control-container">  </div>
     //     </div>
     //     <div class="example-code-container"> 
     //         <span class="example-title"> ... </span>
@@ -22,12 +23,22 @@ for (let ex in examples) {
     let div = document.createElement('div');
     div.classList.add('example');
 
+    // diagram
     let diagramdiv = document.createElement('div');
     diagramdiv.classList.add('example-diagram');
     let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    // set width and height to 400px x 300px
+    // svg.setAttribute('width', '400');
+    // svg.setAttribute('height', '300');
     svg.classList.add('svg-diagram');
-    diagramdiv.appendChild(svg);
 
+    let controlcontainer = document.createElement('div');
+    controlcontainer.classList.add('control-container');
+
+    diagramdiv.appendChild(svg);
+    diagramdiv.appendChild(controlcontainer);
+
+    // code
     let codecontainerdiv = document.createElement('div');
     codecontainerdiv.classList.add('example-code-container');
 
@@ -44,25 +55,35 @@ for (let ex in examples) {
 
     codediv.innerHTML = '<pre>' + hljs.highlight(examples[ex].code, { language: 'javascript' }).value + '</pre>';
     codedivbg.appendChild(codediv);
-
     codecontainerdiv.appendChild(title);
     codecontainerdiv.appendChild(codedivbg);
+
+    // outer
     div.appendChild(diagramdiv);
     div.appendChild(codecontainerdiv);
     containerdiv.appendChild(div);
     
-    draw_code(svg, examples[ex].code);
+    draw_code(svg, controlcontainer, examples[ex].code);
 }
 
-function draw_code(svgelem, code){
+function draw_code(svgelem, controlelem, code){
+
     let draw = (...diagrams) => {
         svgelem.innerHTML = '';
         draw_to_svg(svgelem, diagram_combine(...diagrams));
     };
+
+    let int = new Interactive(controlelem);
     eval(code);
+
+    // is this how do you delete a variable? is this even necessary?
+    // not sure how GC works in JS
+    // TODO : learn more about JS GC
+    if (Object.keys(int.inp_variables).length == 0) int = undefined;
 
     // reset default styles
     default_diagram_style = _init_default_diagram_style;
     default_text_diagram_style = _init_default_text_diagram_style;
     default_textdata = _init_default_textdata;
+
 }
