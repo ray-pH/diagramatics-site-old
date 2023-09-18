@@ -7,6 +7,8 @@ let draw = (...diagrams) => {
     svgelem.innerHTML = '';
     draw_to_svg(svgelem, diagram_combine(...diagrams));
 };
+let controldiv = document.getElementById("control-container");
+let int = new Interactive(controldiv);
 
 let inputstr=`
 let sq = square(20);

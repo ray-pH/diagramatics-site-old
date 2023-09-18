@@ -62,6 +62,10 @@
     /* display: inline-block; */
 }
 
+#control-container{
+    margin-left: 10px;
+}
+
 .svg-settings-button{
     border: none;
     font-family: inherit;
