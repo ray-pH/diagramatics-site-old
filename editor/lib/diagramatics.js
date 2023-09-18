@@ -1187,9 +1187,7 @@ class Interactive {
         this.intervals[variable_name] = setInterval(() => {
           let val = parseFloat(slider.value);
           val += step;
-          if (val > max) {
-            val = min;
-          }
+          val = (val - min) % (max - min) + min;
           slider.value = val.toString();
           callback(val);
         }, interval_time);
@@ -1569,7 +1567,7 @@ __export(exports_shapes_mechanics, {
 function inclined_plane(length, angle2) {
   return polygon([V2(0, 0), V2(length, length * Math.tan(angle2)), V2(length, 0)]);
 }
-function spring(p1, p2, radius = 1, coil_number = 10, sample_number = 100, separation_coefficient = 0.398) {
+function spring(p1, p2, radius = 1, coil_number = 10, separation_coefficient = 0.5, sample_number = 100) {
   let angle2 = p2.sub(p1).angle();
   let length = p2.sub(p1).length();
   let R = separation_coefficient;
