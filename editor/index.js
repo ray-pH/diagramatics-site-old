@@ -22,6 +22,7 @@ let typing_timeout = undefined;
 
 function eval_diagram(str){
     let success = true;
+    controldiv.innerHTML = '';
     try {
         eval(str);
     }catch(e){
