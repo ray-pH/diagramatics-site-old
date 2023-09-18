@@ -1,4 +1,4 @@
-import * as diagramatics from './lib/diagramatics.js'
+import * as diagramatics from '../lib/diagramatics.js'
 Object.entries(diagramatics).forEach(([name, exported]) => window[name] = exported);
 import { hljs } from './lib/highlighter.js'
 import { examples } from './examples.js'
