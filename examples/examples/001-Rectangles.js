@@ -1,6 +1,6 @@
-// The Rectangle
+// Simple Squares
 ////
-let big_rect   = square(150).fill('orange');
+let big_rect   = square(150).fill('lightblue').stroke('none');
 let small_rect = square(20).fill('blue').rotate(Math.PI/4);
 let r1 = small_rect.position(big_rect.get_anchor('top-left'));
 let r2 = small_rect.position(big_rect.get_anchor('top-right'));
