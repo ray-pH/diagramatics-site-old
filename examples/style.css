@@ -1,28 +1,49 @@
-/* <div class="example">
-/*     <div class="example-diagram"> 
+/* <div class="example"> 
+/*     <div class="example-diagram">
 /*         <svg class="svg-diagram"> ... </svg>
- *     </div>
-/*     <div class="example-code"> 
- *         ... 
- *     </div>
+/*     </div>
+/*     <div class="example-code-container"> 
+/*         <span class="example-title"> ... </span>
+/*         <div class="example-code-bg">
+/*             <div class="example-code">
+/*                 ...
+/*             </div>
+/*         </div>
+/*     </div>
 /* </div> */
 
- .example {
+/* Override default hljs background */
+.example-code.hljs {
+     background: none;
+}
+pre {
+    margin : 0px;
+}
+
+.example {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     margin: 1em;
- }
+}
 .example-diagram {
+}
+.svg-diagram {
     width: 400px;
     height: 300px;
 }
-.svg-diagram {
-    width: 100%;
-    height: 100%;
+.example-title {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
 }
-.example-code {
+.example-code-container {
     flex-grow: 1;
-    overflow: auto;
+    overflow-x: auto;
+}
+.example-code-bg {
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
 }
