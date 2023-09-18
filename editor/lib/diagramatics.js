@@ -122,7 +122,7 @@ var anchor_to_textdata = function(anchor) {
 function diagram_combine(...diagrams) {
   let newdiagrams = diagrams.map((d) => d.copy());
   let newd = new Diagram(DiagramType.Diagram, { children: newdiagrams });
-  return newd.move_origin(Anchor.CenterCenter);
+  return newd.move_origin(diagrams[0].origin);
 }
 function line(start, end) {
   let path = new Path([start, end]);
@@ -200,6 +200,22 @@ class Diagram {
       Object.setPrototypeOf(newd.path, Path.prototype);
       newd.path = newd.path.copy();
     }
+    return newd;
+  }
+  collect_children() {
+    let children = [];
+    if (this.type == DiagramType.Diagram) {
+      for (let c of this.children) {
+        children = children.concat(c.collect_children());
+      }
+    } else {
+      children.push(this);
+    }
+    return children;
+  }
+  flatten() {
+    let newd = this.copy();
+    newd.children = newd.collect_children();
     return newd;
   }
   apply(func) {
