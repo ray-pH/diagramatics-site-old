@@ -21,11 +21,15 @@ pre {
     margin : 0px;
 }
 
+hr{
+    width: 95%;
+    border-top: 1px dashed rgba(0,0,0,0.3);
+}
 .example {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin: 1em;
 }
 .example-diagram {
@@ -35,12 +39,14 @@ pre {
     height: 300px;
 }
 .control-container {
-    margin-left: 50px;
+    margin-left: 60px;
+    margin-bottom: 100px;
 }
 .example-title {
     display: block;
     margin-bottom: 10px;
     font-weight: 600;
+    font-size: 1.2em;
 }
 .example-code-container {
     flex-grow: 1;

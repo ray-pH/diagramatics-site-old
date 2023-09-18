@@ -64,6 +64,10 @@ for (let ex in examples) {
     containerdiv.appendChild(div);
     
     draw_code(svg, controlcontainer, examples[ex].code);
+
+    // add horizontal line
+    let hr = document.createElement('hr');
+    containerdiv.appendChild(hr);
 }
 
 function draw_code(svgelem, controlelem, code){
@@ -79,7 +83,11 @@ function draw_code(svgelem, controlelem, code){
     // is this how do you delete a variable? is this even necessary?
     // not sure how GC works in JS
     // TODO : learn more about JS GC
-    if (Object.keys(int.inp_variables).length == 0) int = undefined;
+    if (Object.keys(int.inp_variables).length == 0) {
+        int = undefined;
+        // delete controlelem if it's empty
+        controlelem.outerHTML = '';
+    }
 
     // reset default styles
     default_diagram_style      = {..._init_default_diagram_style};
