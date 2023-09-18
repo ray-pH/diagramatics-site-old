@@ -21,6 +21,11 @@ let editor_footer_desc = document.getElementById("editor-footer-desc");
 let typing_timeout = undefined;
 
 function eval_diagram(str){
+    // reset default styles
+    default_diagram_style = _init_default_diagram_style;
+    default_text_diagram_style = _init_default_text_diagram_style;
+    default_textdata = _init_default_textdata;
+
     let success = true;
     controldiv.innerHTML = '';
     try {

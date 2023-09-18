@@ -822,6 +822,7 @@ var default_diagram_style = {
   "stroke-linejoin": "round",
   "vector-effect": "non-scaling-stroke"
 };
+var _init_default_diagram_style = Object.assign({}, default_diagram_style);
 var default_text_diagram_style = {
   fill: "black",
   stroke: "none",
@@ -831,6 +832,7 @@ var default_text_diagram_style = {
   "stroke-linejoin": "round",
   "vector-effect": "non-scaling-stroke"
 };
+var _init_default_text_diagram_style = Object.assign({}, default_text_diagram_style);
 var default_textdata = {
   text: "",
   "font-family": "Latin Modern Math, sans-serif",
@@ -839,6 +841,7 @@ var default_textdata = {
   "text-anchor": "middle",
   "dominant-baseline": "middle"
 };
+var _init_default_textdata = Object.assign({}, default_textdata);
 // /home/ray/Code/diagramatics/dist/unicode_utils.js
 function str_latex_to_unicode(str) {
   str = str + " ";
@@ -1632,6 +1635,9 @@ export {
   exports_shapes_annotation as annotation,
   align_vertical,
   align_horizontal,
+  _init_default_textdata,
+  _init_default_text_diagram_style,
+  _init_default_diagram_style,
   Vector2,
   Vdir,
   V2,
