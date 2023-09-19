@@ -27,6 +27,7 @@ hr{
 }
 .example {
     display: flex;
+    flex-flow: row wrap;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
