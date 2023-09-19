@@ -18,6 +18,11 @@ for filename in html_files:
     with open(f'./content/{filename}', 'r') as f: 
         html_content = f.read()
 
+    # change the title of the page
+    title = (filename[0].upper() + filename[1:])[:-5]
+    if title == 'Index': title = 'Guide'
+    _template = _template.replace('<title></title>', f'<title>{title} : Diagramatics</title>')
+
     # replace the inner content of <div id="content"></div> in _template with htmlcontent
     html_full = _template.replace('<div id="content"></div>', f'<div id="content">{html_content}</div>')
 

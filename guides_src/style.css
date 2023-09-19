@@ -1,0 +1,59 @@
+/* <div class="example"> 
+/*     <div class="example-diagram">
+/*         <svg class="svg-diagram"> ... </svg>
+/*         <div class="control-container">  </div>
+/*     </div>
+/*     <div class="example-code-container"> 
+/*         <span class="example-title"> ... </span>
+/*         <div class="example-code-bg">
+/*             <div class="example-code">
+/*                 ...
+/*             </div>
+/*         </div>
+/*     </div>
+/* </div> */
+
+/* Override default hljs background */
+.example-code.hljs {
+     background: none;
+}
+pre {
+    margin : 0px;
+}
+
+hr{
+    width: 95%;
+    border-top: 1px dashed rgba(0,0,0,0.3);
+}
+.example {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 1em;
+}
+.example-diagram {
+}
+.svg-diagram {
+    width: 200px;
+    height: 200px;
+}
+.control-container {
+    margin-left: 60px;
+    margin-bottom: 100px;
+}
+.example-title {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 1.2em;
+}
+.example-code-container {
+    flex-grow: 1;
+    overflow-x: auto;
+}
+.example-code-bg {
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+}

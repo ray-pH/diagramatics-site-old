@@ -2039,7 +2039,7 @@ var BUILT_IN_VARIABLES = [
 ];
 var BUILT_INS = [].concat(BUILT_IN_GLOBALS, TYPES, ERROR_TYPES);
 
-// _highlighter.js
+// highlighter.js
 core_default.registerLanguage("javascript", javascript);
 var hljs = core_default;
 export {
