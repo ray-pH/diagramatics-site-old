@@ -1,8 +1,61 @@
 
+Diagramatics provides a set of basic building blocks for creating diagrams. 
+These are <code>polygon</code>, <code>curve</code>, <code>empty</code>, and <code>text</code>.
 
-polygon, curve, empty, text
-
-<div class="diagramatics">
+<div class="diagramatics s100" title="polygon" subtitle="(points : Vector2[])">
     let poly = polygon([V2(0,0), V2(0,10), V2(10,10)]);
     draw(poly);
+</div>
+<div class="diagramatics s100" title="curve" subtitle="(points : Vector2[])">
+    let curv = curve([V2(0,0), V2(0,10), V2(10,10)]);
+    draw(curv);
+</div>
+<div class="diagramatics s100" title="text" subtitle="(str : string)">
+    let sq = square(20);
+    let tx = text('hello');
+    draw(sq, tx);
+</div>
+
+Diagramatics also provides a set of basic shapes for creating diagrams.
+These are <code>rectangle</code>, <code>square</code>, <code>regular_polygon</code>, <code>regular_polygon_side</code>, <code>circle</code>, <code>arc</code>, <code>arrow</code>, <code>arrow2</code>, <code>textvar</code>.
+
+<div class="diagramatics s100" title="rectangle" subtitle="(width : number, height : number)">
+    let rect = rectangle(20,10);
+    draw(rect);
+</div>
+
+<div class="diagramatics s100" title="square" subtitle="(sidelength : number = 1)">
+    let sq = square(20);
+    draw(sq);
+</div>
+
+<div class="diagramatics s100" title="regular_polygon" subtitle="(sides : number, radius : number)">
+    let poly = regular_polygon(5, 10);
+    draw(poly);
+</div>
+
+<div class="diagramatics s100" title="regular_polygon_side" subtitle="(sides : number, sidelength : number)">
+    let poly = regular_polygon_side(5, 10);
+    draw(poly);
+</div>
+
+<div class="diagramatics s100" title="circle" subtitle="(radius : number = 1)">
+    let circ = circle(10);
+    draw(circ);
+</div>
+
+<div class="diagramatics s100" title="arc" subtitle="(radius : number = 1, angle : number)">
+    let ar = arc(10, Math.PI/3);
+    draw(ar);
+</div>
+
+<div class="diagramatics s100" title="arrow" subtitle="(vector : Vector2, headsize : number = 1)">
+    let ar = arrow(V2(10,5), 0.5);
+    draw(ar);
+</div>
+
+<div class="diagramatics s100" title="textvar" subtitle="(str : string)">
+    let sq = square(20);
+    let tx = textvar('hello');
+    draw(sq, tx);
 </div>

@@ -2,6 +2,23 @@ import * as diagramatics from '../lib/diagramatics.js'
 Object.entries(diagramatics).forEach(([name, exported]) => window[name] = exported);
 import { hljs } from './lib/highlighter.js'
 
+function left_trim_block(block){
+    let lines = block.split('\n');
+    // if the first line is empty, remove it
+    if (lines[0] == '') lines.shift();
+    // count indent of first line
+    let indent = 0;
+    for (let i = 0; i < lines[0].length; i++) {
+        if (lines[0][i] == ' ') indent++;
+        else break;
+    }
+    // remove indent from all lines
+    for (let i = 0; i < lines.length; i++) {
+        lines[i] = lines[i].substring(indent);
+    }
+    return lines.join('\n');
+}
+
 function eval_diagramatics(diagramatics_div){
     // <div class="example">
     //     <div class="example-diagram">
@@ -17,7 +34,9 @@ function eval_diagramatics(diagramatics_div){
     //         </div>
     //     </div>
     // </div>
-    let code = diagramatics_div.innerHTML;
+    let code_str  = left_trim_block(diagramatics_div.innerHTML);
+    let title_str = diagramatics_div.getAttribute('title');
+    let subtitle_str = diagramatics_div.getAttribute('subtitle');
     diagramatics_div.innerHTML = '';
 
     // ============================================
@@ -41,6 +60,19 @@ function eval_diagramatics(diagramatics_div){
     diagramdiv.appendChild(controlcontainer);
 
     // code
+    let title;
+    let subtitle;
+    if (title_str != null) {
+        title = document.createElement('span');
+        title.classList.add('example-title');
+        title.innerHTML = title_str;
+    }
+    if (subtitle_str != null) {
+        subtitle = document.createElement('span');
+        subtitle.classList.add('example-subtitle');
+        subtitle.innerHTML = subtitle_str;
+    }
+    
     let codecontainerdiv = document.createElement('div');
     codecontainerdiv.classList.add('example-code-container');
 
@@ -51,8 +83,14 @@ function eval_diagramatics(diagramatics_div){
     codediv.classList.add('hljs');
     codediv.classList.add('javascript');
 
-    codediv.innerHTML = '<pre>' + hljs.highlight(code, { language: 'javascript' }).value + '</pre>';
+    codediv.innerHTML = '<pre>' + hljs.highlight(code_str, { language: 'javascript' }).value + '</pre>';
     codedivbg.appendChild(codediv);
+    if (title_str != null) {
+        codecontainerdiv.appendChild(title);
+    }
+    if (subtitle_str != null) {
+        codecontainerdiv.appendChild(subtitle);
+    }
     codecontainerdiv.appendChild(codedivbg);
 
     // outer
@@ -60,11 +98,7 @@ function eval_diagramatics(diagramatics_div){
     div.appendChild(codecontainerdiv);
     diagramatics_div.appendChild(div);
     
-    draw_code(svg, controlcontainer, code);
-
-    // add horizontal line
-    let hr = document.createElement('hr');
-    diagramatics_div.appendChild(hr);
+    draw_code(svg, controlcontainer, code_str);
 
 }
 
@@ -76,7 +110,11 @@ function draw_code(svgelem, controlelem, code){
     };
 
     let int = new Interactive(controlelem);
-    eval(code);
+    try {
+        eval(code);
+    } catch (e) {
+        console.warn(e);
+    }
 
     // is this how do you delete a variable? is this even necessary?
     // not sure how GC works in JS

@@ -27,6 +27,7 @@ hr{
 }
 .example {
     display: flex;
+    flex-flow: row wrap;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
@@ -37,16 +38,32 @@ hr{
 .svg-diagram {
     width: 200px;
     height: 200px;
+    margin-right: 20px;
+}
+.s100>*>*>.svg-diagram{
+    width: 100px;
+    height: 100px;
+}
+.s150>*>*>.svg-diagram{
+    width: 150px;
+    height: 150px;
+}
+.s200>*>*>.svg-diagram{
+    width: 200px;
+    height: 200px;
 }
 .control-container {
     margin-left: 60px;
     margin-bottom: 100px;
 }
 .example-title {
-    display: block;
+    display: inline-block;
     margin-bottom: 10px;
     font-weight: 600;
     font-size: 1.2em;
+}
+.example-subtitle {
+    margin-left: 10px;
 }
 .example-code-container {
     flex-grow: 1;
@@ -56,4 +73,10 @@ hr{
     padding: 20px;
     background-color: #f5f5f5;
     border-radius: 10px;
+}
+.multicell-container {
+}
+.multicell-container>.diagramatics{
+    /* width: 600px; */
+    /* background: red; */
 }
