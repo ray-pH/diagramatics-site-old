@@ -19,8 +19,8 @@ let bean0 = circle(24).scale(V2(1,1.5))
 let angle_sep = from_degree(36);
 let bean1 = bean0.rotate(angle_sep/2*3, pivot);
 let bean2 = bean0.rotate(angle_sep/2, pivot);
-let bean3 = bean2.hflip();
-let bean4 = bean1.hflip();
+let bean3 = bean2.hflip(0);
+let bean4 = bean1.hflip(0);
 
 let bean_arc_r1 = bean0.origin.length();
 let bean_arc1 = arc(bean_arc_r1, 3*angle_sep).rotate(angle_sep)
