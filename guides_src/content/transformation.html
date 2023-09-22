@@ -141,21 +141,31 @@ Diagramatics provide the following transformation
     draw(sq0, sq1);
 </div>
 
-<div class="diagramatics s200" title="Diagram.rotate" subtitle="(angle : number, pivot : Vector2 = V2(0,0))">
-    let sq = square(10);
-    let sq0 = sq.stroke('grey').strokedasharray([5,5]);
-    let sq1 = sq.rotate(Math.PI/3);
-    draw(sq0, sq1);
-</div>
-<div class="diagramatics s200" >
+<div class="diagramatics s200" title="Diagram.rotate" subtitle="(angle : number, pivot? : Vector2)">
     let sq = square(10);
     let sq0 = sq.stroke('grey').strokedasharray([5,5]);
     let sq1 = sq.rotate(Math.PI/3, V2(-5,-5));
     draw(sq0, sq1);
 </div>
+<div class="diagramatics s200">
+    // if pivot is left undefined, the diagram will rotate around its origin
+
+    let sq = square(10);
+    let sq0 = sq.stroke('grey').strokedasharray([5,5]);
+    let sq1 = sq.rotate(Math.PI/3);
+    draw(sq0, sq1);
+</div>
 
 
-<div class="diagramatics s200" title="Diagram.scale" subtitle="(scale : Vector2, origin : Vector2 = V2(0,0))">
+<div class="diagramatics s200" title="Diagram.scale" subtitle="(scale : Vector2, origin? : Vector2)">
+    let sq = square(10);
+    let sq0 = sq.stroke('grey').strokedasharray([5,5]);
+    let sq1 = sq.scale(V2(2,0.5), V2(-5,-5));
+    draw(sq0, sq1);
+</div>
+<div class="diagramatics s200">
+    // if origin is left undefined, the diagram will scale around its origin
+
     let sq = square(10);
     let sq0 = sq.stroke('grey').strokedasharray([5,5]);
     let sq1 = sq.scale(V2(2,0.5));
@@ -163,12 +173,50 @@ Diagramatics provide the following transformation
 </div>
 
 <div class="diagramatics s200" title="Diagram.reflect_over_point" subtitle="(p : Vector2)">
-    let p5 = regular_polygon(5, 10);
-    let p5_0 = p5.stroke('grey').strokedasharray([5,5]);
+    let penta   = regular_polygon(5, 10);
+    let penta_0 = penta.stroke('grey').strokedasharray([5,5]);
 
     let refl_point = V2(10,5);
-    let p5_1 = p5.reflect_over_point(refl_point);
+    let penta_1 = penta.reflect_over_point(refl_point);
 
     let refl_indicator = text('⮾').position(refl_point).fontsize(11);
-    draw(p5_0, p5_1, refl_indicator);
+    draw(penta_0, penta_1, refl_indicator);
+</div>
+<div class="diagramatics s200">
+    // you can see which point reflected into which location in the diagram below
+
+    let penta   = regular_polygon(5, 10);
+    let penta_0 = penta.stroke('grey').strokedasharray([5,5]);
+
+    let refl_point = V2(10,5);
+    let penta_1 = penta.reflect_over_point(refl_point);
+
+    let refl_indicator = text('⮾').position(refl_point).fontsize(11);
+    draw(penta_0.debug(), penta_1.debug(), refl_indicator);
+</div>
+
+
+<div class="diagramatics s200" title="Diagram.reflect_over_line" subtitle="(p1 : Vector2, p2 : Vector2)">
+    let penta   = regular_polygon(5, 10);
+    let penta_0 = penta.stroke('grey').strokedasharray([5,5]);
+
+    let p1 = V2(0,15);
+    let p2 = V2(13,2);
+    let penta_1 = penta.reflect_over_line(p1, p2);
+
+    let refl_line = line(p1,p2).stroke('grey').strokedasharray([5,5]);
+    draw(penta_0, penta_1, refl_line);
+</div>
+<div class="diagramatics s200">
+    // you can see which point reflected into which location in the diagram below
+
+    let penta   = regular_polygon(5, 10);
+    let penta_0 = penta.stroke('grey').strokedasharray([5,5]);
+
+    let p1 = V2(0,15);
+    let p2 = V2(13,2);
+    let penta_1 = penta.reflect_over_line(p1, p2);
+
+    let refl_line = line(p1,p2).stroke('grey').strokedasharray([5,5]);
+    draw(penta_0.debug(), penta_1.debug(), refl_line);
 </div>
