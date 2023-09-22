@@ -7,9 +7,13 @@ with open('_template.html', 'r') as f:
     _template = f.read()
 with open('_header.html', 'r') as f:
     _header = f.read()
+with open('_navigation.html', 'r') as f:
+    _navigation = f.read()
 
 # replace the inner content of <div class="header"></div> in _template with _header
 _template = _template.replace('<div class="header"></div>', f'<div class="header">{_header}</div>')
+# replace the inner content of <div class="navigation"></div> in _template with _navigation
+_template = _template.replace('<div class="navigation"></div>', f'<div class="navigation">{_navigation}</div>')
 
 # list all *.html file that doesnt start with _ (underscore)
 html_files = [f for f in os.listdir('./content/') if f.endswith('.html') and not f.startswith('_')]
