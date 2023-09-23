@@ -11,3 +11,7 @@ cd ..
 cd ./preview/
 bash ./build.sh
 cd ..
+
+cd ./guides_src/
+bash ./build.sh
+cd ..
