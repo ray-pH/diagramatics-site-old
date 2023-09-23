@@ -35,6 +35,14 @@ function eval_diagramatics(diagramatics_div){
     //     </div>
     // </div>
     let code_str  = left_trim_block(diagramatics_div.innerHTML);
+    // convert html entities to characters
+    code_str = code_str.replace(/&lt;/g, '<');
+    code_str = code_str.replace(/&gt;/g, '>');
+    code_str = code_str.replace(/&amp;/g, '&');
+    code_str = code_str.replace(/&quot;/g, '"');
+    code_str = code_str.replace(/&apos;/g, "'");
+    code_str = code_str.replace(/&nbsp;/g, ' ');
+
     let title_str = diagramatics_div.getAttribute('title');
     let subtitle_str = diagramatics_div.getAttribute('subtitle');
     diagramatics_div.innerHTML = '';
