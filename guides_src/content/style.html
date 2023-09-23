@@ -1,0 +1,176 @@
+<!-- export type DiagramStyle = { -->
+<!--     "stroke"?           : string, -->
+<!--     "fill"?             : string, -->
+<!--     "opacity"?          : string, -->
+<!--     "stroke-width"?     : string, // number -->
+<!--     "stroke-linecap"?   : string, -->
+<!--     "stroke-dasharray"? : string, // number[] -->
+<!--     "stroke-linejoin"?  : string, -->
+<!--     "vector-effect"?    : string, -->
+<!--     // TODO : add more style -->
+<!-- } -->
+
+Diagram have a style property that can be used to style the diagram.
+
+<pre>
+    stroke           : string,
+    fill             : string,
+    opacity          : string,
+    stroke-width     : number,
+    stroke-linecap   : string,
+    stroke-dasharray : number[],
+    stroke-linejoin  : string,
+    vector-effect    : string,
+</pre>
+
+<div class='colorinfo' style="background-color:#1f77b4">blue        : #1f77b4</div>
+<div class='colorinfo' style="background-color:#aec7e8">lightblue   : #aec7e8</div>
+<div class='colorinfo' style="background-color:#ff7f0e">orange      : #ff7f0e</div>
+<div class='colorinfo' style="background-color:#ffbb78">lightorange : #ffbb78</div>
+<div class='colorinfo' style="background-color:#2ca02c">green       : #2ca02c</div>
+<div class='colorinfo' style="background-color:#98df8a">lightgreen  : #98df8a</div>
+<div class='colorinfo' style="background-color:#d62728">red         : #d62728</div>
+<div class='colorinfo' style="background-color:#ff9896">lightred    : #ff9896</div>
+<div class='colorinfo' style="background-color:#9467bd">purple      : #9467bd</div>
+<div class='colorinfo' style="background-color:#c5b0d5">lightpurple : #c5b0d5</div>
+<div class='colorinfo' style="background-color:#8c564b">brown       : #8c564b</div>
+<div class='colorinfo' style="background-color:#c49c94">lightbrown  : #c49c94</div>
+<div class='colorinfo' style="background-color:#e377c2">pink        : #e377c2</div>
+<div class='colorinfo' style="background-color:#f7b6d2">lightpink   : #f7b6d2</div>
+<div class='colorinfo' style="background-color:#7f7f7f">grey        : #7f7f7f</div>
+<div class='colorinfo' style="background-color:#c7c7c7">lightgrey   : #c7c7c7</div>
+<div class='colorinfo' style="background-color:#7f7f7f">gray        : #7f7f7f</div>
+<div class='colorinfo' style="background-color:#c7c7c7">lightgray   : #c7c7c7</div>
+<div class='colorinfo' style="background-color:#bcbd22">olive       : #bcbd22</div>
+<div class='colorinfo' style="background-color:#dbdb8d">lightolive  : #dbdb8d</div>
+<div class='colorinfo' style="background-color:#17becf">cyan        : #17becf</div>
+<div class='colorinfo' style="background-color:#9edae5">lightcyan   : #9edae5</div>
+
+<!---->
+<!-- public fill(color : string) : Diagram {  -->
+<!--     return this.update_style('fill', color); -->
+<!-- } -->
+<!-- public stroke(color : string) : Diagram {  -->
+<!--     return this.update_style('stroke', color); -->
+<!-- } -->
+<!-- public opacity(opacity : number) : Diagram { -->
+<!--     return this.update_style('opacity', opacity.toString()); -->
+<!-- } -->
+<!-- public strokewidth(width : number) : Diagram {  -->
+<!--     return this.update_style('stroke-width', width.toString()); -->
+<!-- } -->
+<!-- public strokelinecap(linecap : 'butt' | 'round' | 'square') : Diagram { -->
+<!--     return this.update_style('stroke-linecap', linecap); -->
+<!-- } -->
+<!-- public strokelinejoin(linejoin : 'arcs' | 'bevel' | 'miter' | 'miter-clip' | 'round') : Diagram { -->
+<!--     return this.update_style('stroke-linejoin', linejoin); -->
+<!-- } -->
+<!-- public strokedasharray(dasharray : number[]) : Diagram { -->
+<!--     return this.update_style('stroke-dasharray', dasharray.join(',')); -->
+<!-- } -->
+<!-- public vectoreffect(vectoreffect : 'none' | 'non-scaling-stroke' | 'non-scaling-size' | 'non-rotation' | 'fixed-position' -->
+<!-- ) : Diagram { -->
+<!--     return this.update_style('vector-effect', vectoreffect); -->
+<!-- } -->
+
+
+<div class="diagramatics s200" title="Diagram.fill" subtitle="(color : string)">
+    let sq = square(10).fill('blue');
+    draw(sq);
+</div>
+<div class="diagramatics s200">
+    // color can be given as colorname or hex color code
+
+    let sq = square(10).fill('#d62728');
+    draw(sq);
+</div>
+<div class="diagramatics s200" title="Diagram.stroke" subtitle="(color : string)">
+    let sq = square(10).stroke('red');
+    draw(sq);
+</div>
+<div class="diagramatics s200" title="Diagram.opacity" subtitle="(opacity : number)">
+    let sq0 = square(10).fill('blue');
+    let sq1 = square(5).translate(V2(5,0)).fill('red').opacity(0.5);
+    let sq2 = square(5).translate(V2(-5,0)).fill('red').opacity(1.0);
+    draw(sq0,sq1,sq2);
+</div>
+<div class="diagramatics s200" title="Diagram.strokewidth" subtitle="(width : number)">
+    let sq = square(10).strokewidth(4);
+    draw(sq);
+</div>
+
+
+<h2>Relating to Stroke</h2>
+<div class="diagramatics s200" title="Diagram.strokelinecap" subtitle="(linecap : 'butt' | 'round' | 'square')">
+    let l   = line(V2(0,0), V2(0,1)).strokewidth(12);
+    let l0 = l.strokelinecap('butt');
+    let l1 = l.strokelinecap('square');
+    let l2 = l.strokelinecap('round');
+
+    [l0, l1, l2] = distribute_horizontal([l0,l1,l2], 0.2);
+
+
+    // highlight to make it easier to see
+    let lhighlight = [l0,l1,l2].map(x => l.stroke('lightred').strokewidth(2).position(x.origin));
+
+    draw(l0, l1, l2, ...lhighlight);
+</div>
+
+<div class="diagramatics s200" title="Diagram.strokelinejoin" subtitle="(linejoin : 'miter' | 'round' | 'bevel')">
+    // this style is based on svg w3c standard
+    // more info : https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stroke-linejoin
+
+    let c = curve([V2(0,0), V2(0.5,0.5), V2(1,0)]).strokewidth(12);
+    let c0 = c.strokelinejoin('miter');
+    let c1 = c.strokelinejoin('round');
+    let c2 = c.strokelinejoin('bevel');
+
+    [c0, c1, c2] = distribute_vertical([c0,c1,c2], 0.2);
+
+    // highlight to make it easier to see
+    let chighlight = [c0,c1,c2].map(x => c.stroke('lightred').strokewidth(2).position(x.origin));
+
+    draw(c0, c1, c2, ...chighlight);
+</div>
+
+<div class="diagramatics s200" title="Diagram.strokedasharray" subtitle="(dasharray : number[])">
+    // this style is based on svg w3c standard
+    // more info : https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stroke-dasharray
+
+    let l = line(V2(0,0), V2(1,0)).strokewidth(12);
+    // Dashes and gaps of the same size
+    let l0 = l.strokedasharray([20]);
+    let l1 = l.strokedasharray([10]);
+
+    // Dashes starting with a gap
+    let l2 = l.strokedasharray([0,10,0]);
+
+    // Dashes and gaps of different sizes
+    let l3 = l.strokedasharray([40,10]);
+
+    // Dashes and gaps of various sizes with an odd number of values
+    let l4 = l.strokedasharray([40,10,20]);
+
+    // Dashes and gaps of various sizes with an even number of values
+    let l5 = l.strokedasharray([40,10,20,30]);
+
+    let lines = distribute_vertical([l0,l1,l2,l3,l4,l5], 0.2);
+    draw(...lines);
+</div>
+
+<div class="diagramatics s200" title="Diagram.vectoreffect" subtitle="(vectoreffect : 'none' | 'non-scaling-stroke')">
+    let l = line(V2(0,0), V2(2,0));
+
+    // the default is 'non-scaling-stroke', which is calculated relative to the screen.
+    // so a strokewidth 1 will always be 1 pixel wide, 
+    // and doesn't care about the coordinate system of the diagram.
+    let l0 = l.vectoreffect('non-scaling-stroke').strokewidth(1);
+
+    // if using 'none', the strokewidth will be relative to the coordinate system of the diagram.
+    // for example, this line have the length of 2 unit
+    // so a strokewidth of 1 will be 1 unit wide on the coordinate system of the diagram.
+    let l1 = l.vectoreffect('none').strokewidth(1);
+
+    let lines = distribute_vertical([l0,l1], 1.5);
+    draw(...lines);
+</div>
