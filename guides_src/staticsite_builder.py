@@ -25,10 +25,10 @@ for filename in html_files:
     # change the title of the page
     title = (filename[0].upper() + filename[1:])[:-5]
     if title == 'Index': title = 'Guide'
-    _template = _template.replace('<title></title>', f'<title>{title} : Diagramatics</title>')
+    template = _template.replace('<title></title>', f'<title>{title} : Diagramatics</title>')
 
     # replace the inner content of <div id="content"></div> in _template with htmlcontent
-    html_full = _template.replace('<div id="content"></div>', f'<div id="content">{html_content}</div>')
+    html_full = template.replace('<div id="content"></div>', f'<div id="content">{html_content}</div>')
 
     # write the result to a new file in ../guides/
     with open(f'../guides/{filename}', 'w') as f: 
