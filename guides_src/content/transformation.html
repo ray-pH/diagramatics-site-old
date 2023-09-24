@@ -95,3 +95,18 @@ Diagramatics provide the following transformation
     let refl_line = line(p1,p2).stroke('grey').strokedasharray([5,5]);
     draw(penta_0.debug(), penta_1.debug(), refl_line);
 </div>
+
+<hr>
+
+<h2>Custom transformation</h2>
+<div class="diagramatics s200" title="Diagram.transform" subtitle="(transform_function : (p : Vector2) => Vector2)">
+    let sq = square(15);
+
+    // create a transformation function that takes a Vector2 and returns a Vector2
+    let f_wavy = (v) => V2(0, Math.sin(v.x)).add(v);
+
+    // we have to subdivide first before applying the transformation
+    let sqmod  = sq.apply(mod.subdivide(100)).transform(f_wavy);
+
+    draw(sqmod);
+</div>

@@ -30,6 +30,7 @@
 <a href='./shapes.html'>shapes</a>
 <a href='./transformation.html'>transformation</a>
 <a href='./style.html'>style</a>
+<a href='./points.html'>points</a>
 </div>
             <div id="content">Diagram have a style property that can be used to style the diagram.
 
@@ -121,6 +122,7 @@
 </div>
 
 
+<hr>
 <h2>Relating to Stroke</h2>
 <div class="diagramatics s200" title="Diagram.strokelinecap" subtitle="(linecap : 'butt' | 'round' | 'square')">
     let l   = line(V2(0,0), V2(0,1)).strokewidth(12);
@@ -194,6 +196,51 @@
 
     let lines = distribute_vertical([l0,l1], 1.5);
     draw(...lines);
+</div>
+
+<hr>
+<h2>Applying the same style multiple time</h2>
+Let's say you want to draw multiple objects with the same style.
+You can try to apply the style to each object, but that's tedious.
+And if you want to change the style, you have to manually change it for each object.
+<div class="diagramatics s200">
+    let p3 = regular_polygon(3,10).position(V2(-10,10))
+        .fill('lightblue').stroke('blue').strokewidth(2).strokedasharray([5]);
+    let p4 = regular_polygon(4,10).position(V2(-10,-10))
+        .fill('lightblue').stroke('blue').strokewidth(2).strokedasharray([5]);
+    let p5 = regular_polygon(5,10).position(V2(10,10))
+        .fill('lightblue').stroke('blue').strokewidth(2).strokedasharray([5]);
+    let p6 = regular_polygon(6,10).position(V2(10,-10))
+        .fill('lightblue').stroke('blue').strokewidth(2).strokedasharray([5]);
+
+    draw(p3,p4,p5,p6);
+</div>
+
+You can use <code>Diagram.apply</code> and passing it a function that will style the diagram.
+<div class="diagramatics s200" title="Diagram.apply" subtitle="(func : (d : Diagram) => Diagram)">
+    let style = (d) => d.fill('lightblue').stroke('blue').strokewidth(2).strokedasharray([5]);
+
+    let p3 = regular_polygon(3,10).apply(style).position(V2(-10, 10));
+    let p4 = regular_polygon(4,10).apply(style).position(V2(-10,-10));
+    let p5 = regular_polygon(5,10).apply(style).position(V2( 10, 10));
+    let p6 = regular_polygon(6,10).apply(style).position(V2( 10,-10));
+
+    draw(p3,p4,p5,p6);
+</div>
+
+Or you can change the default style of the diagram by changing the values is <code>default_diagram_style</code>.
+<div class="diagramatics s200" title="default_diagram_style">
+    default_diagram_style["fill"]             = 'lightblue';
+    default_diagram_style["stroke"]           = 'blue';
+    default_diagram_style["stroke-width"]     = 2;
+    default_diagram_style["stroke-dasharray"] = [5];
+
+    let p3 = regular_polygon(3,10).position(V2(-10, 10));
+    let p4 = regular_polygon(4,10).position(V2(-10,-10));
+    let p5 = regular_polygon(5,10).position(V2( 10, 10));
+    let p6 = regular_polygon(6,10).position(V2( 10,-10));
+
+    draw(p3,p4,p5,p6);
 </div>
 </div>
         </div>
