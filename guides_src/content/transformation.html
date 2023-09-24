@@ -1,24 +1,25 @@
+<h1>Transformation</h1>
 Diagram that has been created can be transformed.
 Diagramatics provide the following transformation 
 <code>translate</code>, <code>position</code>, <code>rotate</code>, <code>scale</code>, <code>reflect_over_point</code>, <code>reflect_over_line</code>, <code>reflect</code>, <code>vflip</code>, <code>hflip</code>, <code>move_origin</code>, <code>move_origin_text</code>.
 
 <div class="diagramatics s200" title="Diagram.translate" subtitle="(v : Vector2)">
     let sq = square(10);
-    let sq0 = sq.stroke('grey').strokedasharray([5,5]);
+    let sq0 = sq.stroke('grey').strokedasharray([5]);
     let sq1 = sq.translate(V2(5,5));
     draw(sq0, sq1);
 </div>
 
 <div class="diagramatics s200" title="Diagram.position" subtitle="(v : Vector2)">
     let sq = square(10);
-    let sq0 = sq.stroke('grey').strokedasharray([5,5]);
+    let sq0 = sq.stroke('grey').strokedasharray([5]);
     let sq1 = sq.position(V2(5,5));
     draw(sq0, sq1);
 </div>
 
 <div class="diagramatics s200" title="Diagram.rotate" subtitle="(angle : number, pivot? : Vector2)">
     let sq = square(10);
-    let sq0 = sq.stroke('grey').strokedasharray([5,5]);
+    let sq0 = sq.stroke('grey').strokedasharray([5]);
     let sq1 = sq.rotate(Math.PI/3, V2(-5,-5));
     draw(sq0, sq1);
 </div>
@@ -26,7 +27,7 @@ Diagramatics provide the following transformation
     // if pivot is left undefined, the diagram will rotate around its origin
 
     let sq = square(10);
-    let sq0 = sq.stroke('grey').strokedasharray([5,5]);
+    let sq0 = sq.stroke('grey').strokedasharray([5]);
     let sq1 = sq.rotate(Math.PI/3);
     draw(sq0, sq1);
 </div>
@@ -34,7 +35,7 @@ Diagramatics provide the following transformation
 
 <div class="diagramatics s200" title="Diagram.scale" subtitle="(scale : Vector2, origin? : Vector2)">
     let sq = square(10);
-    let sq0 = sq.stroke('grey').strokedasharray([5,5]);
+    let sq0 = sq.stroke('grey').strokedasharray([5]);
     let sq1 = sq.scale(V2(2,0.5), V2(-5,-5));
     draw(sq0, sq1);
 </div>
@@ -42,63 +43,112 @@ Diagramatics provide the following transformation
     // if origin is left undefined, the diagram will scale around its origin
 
     let sq = square(10);
-    let sq0 = sq.stroke('grey').strokedasharray([5,5]);
+    let sq0 = sq.stroke('grey').strokedasharray([5]);
     let sq1 = sq.scale(V2(2,0.5));
     draw(sq0, sq1);
 </div>
 
+<div class="diagramatics s200" title="Diagram.vflip" subtitle="(a? : number)">
+    // Reflect the diagram vertically over a horizontal line `y = a`
+    // if left undefined, flip over its origin
+
+    let tr = regular_polygon(3,10);
+    let tr0 = tr.stroke('grey').strokedasharray([5]);
+    let tr1 = tr.vflip(-10);
+
+    draw(tr0, tr1);
+</div>
+
+<div class="diagramatics s200" title="Diagram.hflip" subtitle="(a? : number)">
+    // Reflect the diagram horizontally over a vertical line `x = a`
+    // if left undefined, flip over its origin
+
+    let tr = regular_polygon(3,10).rotate(Math.PI/6);
+    let tr0 = tr.stroke('grey').strokedasharray([5]);
+    let tr1 = tr.hflip(10);
+
+    draw(tr0, tr1);
+</div>
+
+<hr>
+<h1>Reflection</h1>
+    <!-- /** -->
+    <!--  * Reflect the diagram -->
+    <!--  * if given 0 arguments, reflect over the origin -->
+    <!--  * if given 1 argument, reflect over a point p1 -->
+    <!--  * if given 2 arguments, reflect over a line defined by two points p1 and p2 -->
+    <!--  * @param p1 point -->
+    <!--  * @param p2 point -->
+    <!--  */ -->
+    <!-- public reflect(p1? : Vector2, p2? : Vector2){ -->
+<div class="diagramatics s200" title="Diagram.reflect" subtitle="(p1? : Vector2, p2? : Vector2)">
+    // if given 0 arguments, reflect over the origin
+    // if given 1 argument, reflect over a point p1
+    // if given 2 arguments, reflect over a line defined by two points p1 and p2
+
+    let sq = square(10);
+
+    sq.reflect(V2(1,0));
+    // is the same as
+    sq.reflect_over_point(V2(1,0));
+
+    sq.reflect(V2(1,0), V2(2,0));
+    // is the same as
+    sq.reflect_over_line(V2(1,0), V2(2,0));
+</div>
+
 <div class="diagramatics s200" title="Diagram.reflect_over_point" subtitle="(p : Vector2)">
     let penta   = regular_polygon(5, 10);
-    let penta_0 = penta.stroke('grey').strokedasharray([5,5]);
+    let penta_0 = penta.stroke('grey').strokedasharray([5]);
 
     let refl_point = V2(10,5);
     let penta_1 = penta.reflect_over_point(refl_point);
 
-    let refl_indicator = text('⮾').position(refl_point).fontsize(11);
+    let refl_indicator = circle(0.5).fill('blue').position(refl_point);
     draw(penta_0, penta_1, refl_indicator);
 </div>
 <div class="diagramatics s200">
     // you can see which point reflected into which location in the diagram below
 
     let penta   = regular_polygon(5, 10);
-    let penta_0 = penta.stroke('grey').strokedasharray([5,5]);
+    let penta_0 = penta.stroke('grey').strokedasharray([5]);
 
     let refl_point = V2(10,5);
     let penta_1 = penta.reflect_over_point(refl_point);
 
-    let refl_indicator = text('⮾').position(refl_point).fontsize(11);
+    let refl_indicator = circle(0.5).fill('blue').position(refl_point);
     draw(penta_0.debug(), penta_1.debug(), refl_indicator);
 </div>
 
 
 <div class="diagramatics s200" title="Diagram.reflect_over_line" subtitle="(p1 : Vector2, p2 : Vector2)">
     let penta   = regular_polygon(5, 10);
-    let penta_0 = penta.stroke('grey').strokedasharray([5,5]);
+    let penta_0 = penta.stroke('grey').strokedasharray([5]);
 
     let p1 = V2(0,15);
     let p2 = V2(13,2);
     let penta_1 = penta.reflect_over_line(p1, p2);
 
-    let refl_line = line(p1,p2).stroke('grey').strokedasharray([5,5]);
+    let refl_line = line(p1,p2).stroke('grey').strokedasharray([5]);
     draw(penta_0, penta_1, refl_line);
 </div>
 <div class="diagramatics s200">
     // you can see which point reflected into which location in the diagram below
 
     let penta   = regular_polygon(5, 10);
-    let penta_0 = penta.stroke('grey').strokedasharray([5,5]);
+    let penta_0 = penta.stroke('grey').strokedasharray([5]);
 
     let p1 = V2(0,15);
     let p2 = V2(13,2);
     let penta_1 = penta.reflect_over_line(p1, p2);
 
-    let refl_line = line(p1,p2).stroke('grey').strokedasharray([5,5]);
+    let refl_line = line(p1,p2).stroke('grey').strokedasharray([5]);
     draw(penta_0.debug(), penta_1.debug(), refl_line);
 </div>
 
 <hr>
 
-<h2>Custom transformation</h2>
+<h1>Custom transformation</h1>
 <div class="diagramatics s200" title="Diagram.transform" subtitle="(transform_function : (p : Vector2) => Vector2)">
     let sq = square(15);
 
