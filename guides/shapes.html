@@ -26,13 +26,16 @@
 <span class="header-right">⋅</span>
 </div>
         <div id="body-container">
-            <div class="navigation"><a href='./index.html'>home</a>
-<a href='./shapes.html'>shapes</a>
-<a href='./transformation.html'>transformation</a>
-<a href='./style.html'>style</a>
-<a href='./points.html'>points</a>
+            <div class="navigation"><span class="navigation-title">Guides</span>
+<a class="navigation-link" href='./index.html'>home</a>
+<a class="navigation-link" href='./shapes.html'>shapes</a>
+<a class="navigation-link" href='./transformation.html'>transformation</a>
+<a class="navigation-link" href='./style.html'>style</a>
+<a class="navigation-link" href='./points.html'>points</a>
 </div>
             <div id="content">
+<h1>Building Blocks</h1>
+
 Diagramatics provides a set of basic building blocks for creating diagrams. 
 These are <code>polygon</code>, <code>curve</code>, <code>empty</code>, and <code>text</code>.
 
@@ -45,10 +48,15 @@ These are <code>polygon</code>, <code>curve</code>, <code>empty</code>, and <cod
     draw(curv);
 </div>
 <div class="diagramatics s100" title="text" subtitle="(str : string)">
+    // *for math variable italic style, use `textvar()`
+
     let sq = square(20);
     let tx = text('hello');
     draw(sq, tx);
 </div>
+
+<hr>
+<h1>Basic Shapes</h1>
 
 Diagramatics also provides a set of basic shapes for creating diagrams.
 These are <code>rectangle</code>, <code>square</code>, <code>regular_polygon</code>, <code>regular_polygon_side</code>, <code>circle</code>, <code>arc</code>, <code>arrow</code>, <code>arrow2</code>, <code>textvar</code>.
@@ -69,6 +77,9 @@ These are <code>rectangle</code>, <code>square</code>, <code>regular_polygon</co
 </div>
 
 <div class="diagramatics s100" title="regular_polygon_side" subtitle="(sides : number, sidelength : number)">
+    // if you want to define a regular polygon by its side length instead of radius,
+    // use `regular_polygon_side()`
+
     let poly = regular_polygon_side(5, 10);
     draw(poly);
 </div>
@@ -76,6 +87,11 @@ These are <code>rectangle</code>, <code>square</code>, <code>regular_polygon</co
 <div class="diagramatics s100" title="circle" subtitle="(radius : number = 1)">
     let circ = circle(10);
     draw(circ);
+</div>
+<div class="diagramatics s100">
+    // you can create an ellipse by scaling a circle
+    let ell = circle(10).scale(V2(2,1));
+    draw(ell);
 </div>
 
 <div class="diagramatics s100" title="arc" subtitle="(radius : number = 1, angle : number)">

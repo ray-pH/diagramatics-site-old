@@ -2,6 +2,20 @@ import * as diagramatics from '../lib/diagramatics.js'
 Object.entries(diagramatics).forEach(([name, exported]) => window[name] = exported);
 import { hljs } from './lib/highlighter.js'
 
+function navigation_handle(){
+    let nav_divs = document.getElementsByClassName('navigation');
+    if (nav_divs.length == 0) return;
+    let nav_div = nav_divs[0];
+
+    // for each <a> inside nav_div, add class 'current-page' if href matches current page
+    let links = nav_div.getElementsByTagName('a');
+    for (let i = 0; i < links.length; i++) {
+        if (links[i].href == window.location.href) {
+            links[i].classList.add('current-page');
+        }
+    }
+}
+
 function left_trim_block(block){
     let lines = block.split('\n');
     // if the first line is empty, remove it
@@ -152,4 +166,5 @@ function parse_diagram_divs(){
     }
 }
 
+navigation_handle();
 parse_diagram_divs();
