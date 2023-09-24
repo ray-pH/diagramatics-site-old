@@ -1,3 +1,18 @@
+/* 'blue'        : '#1f77b4', */
+/* 'lightblue'   : '#aec7e8', */
+/* 'orange'      : '#ff7f0e', */
+/* 'lightorange' : '#ffbb78', */
+/* 'green'       : '#2ca02c', */
+/* 'lightgreen'  : '#98df8a', */
+/* 'red'         : '#d62728', */
+/* 'lightred'    : '#ff9896', */
+/* 'purple'      : '#9467bd', */
+/* 'lightpurple' : '#c5b0d5', */
+/* 'brown'       : '#8c564b', */
+/* 'lightbrown'  : '#c49c94', */
+/* 'grey'        : '#7f7f7f', */
+/* 'lightgrey'   : '#c7c7c7', */
+
 /* <div class="example"> 
 /*     <div class="example-diagram">
 /*         <svg class="svg-diagram"> ... </svg>
@@ -25,6 +40,10 @@ hr{
     width: 95%;
     border-top: 1px dashed rgba(0,0,0,0.3);
 }
+
+#body-container{
+    margin: 0px 20px;
+}
 .example {
     display: flex;
     flex-flow: row wrap;
@@ -32,6 +51,7 @@ hr{
     justify-content: space-between;
     align-items: flex-start;
     margin: 1em;
+    margin-left: 0;
 }
 .example-diagram {
 }
@@ -74,9 +94,37 @@ hr{
     background-color: #f5f5f5;
     border-radius: 10px;
 }
-.multicell-container {
+
+.navigation{
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin: 10px 0px;
 }
-.multicell-container>.diagramatics{
-    /* width: 600px; */
-    /* background: red; */
+.navigation-title{
+    font-weight: 600;
+    font-size: 1.2em;
+    color: #aaa
+}
+.navigation-link{
+    background: #1f77b4;
+    color: white;
+    text-decoration: none;
+    border-radius: 15px;
+    padding: 8px 10px;
+}
+.navigation-link:hover{
+    background: #aec7e8;
+    color: black;
+}
+.navigation-link.current-page{
+    background: #e0e0e0;
+    color: black;
+    cursor: default;
+}
+
+code {
+    background: #f5f5f5;
+    border-radius: 3px;
+    padding: 2px 4px;
 }
