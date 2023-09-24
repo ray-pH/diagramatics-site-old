@@ -107,7 +107,6 @@ function eval_diagramatics(diagramatics_div){
     diagramatics_div.appendChild(div);
     
     draw_code(svg, controlcontainer, code_str);
-
 }
 
 function draw_code(svgelem, controlelem, code){
@@ -121,6 +120,7 @@ function draw_code(svgelem, controlelem, code){
     try {
         eval(code);
     } catch (e) {
+        svgelem.outerHTML = e.toString();
         console.warn(e);
     }
 
