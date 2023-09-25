@@ -44,6 +44,13 @@ hr{
 #body-container{
     margin: 0px 20px;
 }
+
+.diagramatics{
+    display: none;
+}
+.diagramatics.visible{
+    display: block;
+}
 .example {
     display: flex;
     flex-flow: row wrap;

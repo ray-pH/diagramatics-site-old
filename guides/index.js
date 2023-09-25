@@ -60,6 +60,8 @@ function eval_diagramatics(diagramatics_div){
     let title_str = diagramatics_div.getAttribute('title');
     let subtitle_str = diagramatics_div.getAttribute('subtitle');
     diagramatics_div.innerHTML = '';
+    // add class visible
+    diagramatics_div.classList.add('visible');
 
     // ============================================
 
