@@ -118,10 +118,9 @@ The colors is based on tab20 color scheme.
     draw(sq);
 </div>
 <div class="diagramatics s200" title="Diagram.opacity" subtitle="(opacity : number)">
-    let sq0 = square(10).fill('blue');
-    let sq1 = square(5).translate(V2(5,0)).fill('red').opacity(0.5);
-    let sq2 = square(5).translate(V2(-5,0)).fill('red').opacity(1.0);
-    draw(sq0,sq1,sq2);
+    // opacity is between 0 and 1
+    let sq = square(10).fill('blue').opacity(0.5);
+    draw(sq);
 </div>
 <div class="diagramatics s200" title="Diagram.strokewidth" subtitle="(width : number)">
     let sq = square(10).strokewidth(4);
